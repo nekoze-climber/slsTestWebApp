@@ -1,0 +1,53 @@
+Resources:
+  AutoCreateCodePipeline:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Auto create codepipeline
+      EventPattern:
+        source:
+          - "aws.codecommit"
+        detail-type:
+          - "CodeCommit Pull Request State Change"
+        detail:
+          pullRequestStatus:
+            - "Open"
+      Name: AutoCreateCodePipeline
+      State: "ENABLED"
+      Targets:
+        - Arn: arn:aws:lambda:ap-northeast-1:${self:provider.environment.ACCOUNT}:function:autoCreateCodePipeline-dev
+          Id: autoCreateCodePipeline
+  AutoDeleteCodePipeline:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Auto delete codepipeline
+      EventPattern:
+        source:
+          - "aws.codecommit"
+        detail-type:
+          - "CodeCommit Pull Request State Change"
+        detail:
+          pullRequestStatus:
+            - "Closed"
+      Name: AutoDeleteCodePipeline
+      State: "ENABLED"
+      Targets:
+        - Arn: arn:aws:lambda:ap-northeast-1:${self:provider.environment.ACCOUNT}:function:autoDeleteCodePipeline-dev
+          Id: autoDeleteCodePipeline
+  AutoCreateCodePipelineLambdaInvokePermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "autoCreateCodePipeline-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazonaws.com"
+      SourceArn:
+        "Fn::GetAtt": [AutoCreateCodePipeline, Arn]
+    DependsOn: AutoCreateCodePipeline
+  AutoDeleteCodePipelineLambdaInvokePermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "autoDeleteCodePipeline-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazonaws.com"
+      SourceArn:
+        "Fn::GetAtt": [AutoDeleteCodePipeline, Arn]
+    DependsOn: AutoDeleteCodePipeline

@@ -1,0 +1,40 @@
+Resources:
+  SlsTestWebAppIPSet:
+    Type: AWS::WAFv2::IPSet
+    Properties:
+      Addresses:
+        - ${self:provider.environment.ALLOWEDIP}
+      Description: IP set for SlsTestWebApp Access.
+      IPAddressVersion: IPV4
+      Name: SlsTestWebAppAllowedIPSet
+      Scope: CLOUDFRONT
+  SlsTestWebAppWebACL:
+    Type: AWS::WAFv2::WebACL
+    Properties:
+      DefaultAction:
+        BLOCK: {}
+      Description: WebACL for SlsTestWebApp Access.
+      Name: SlsTestWebAppWebACL
+      Rules:
+        - Action:
+            ALLOW: {}
+          Priority: 0
+          Name: SlsTestWebAppAccessRule
+          VisibilityConfig:
+            CloudWatchMetricsEnabled: false
+            MetricName: SlsTestWebAppRuleMetric
+            SampledRequestsEnabled: false
+          Statement:
+            IPSetReferenceStatement:
+              Arn:
+                "Fn::GetAtt": [SlsTestWebAppIPSet, Arn]
+      Scope: CLOUDFRONT
+      VisibilityConfig:
+        CloudWatchMetricsEnabled: false
+        MetricName: SlsTestWebAppWebACLMetric
+        SampledRequestsEnabled: false
+    DependsOn: SlsTestWebAppIPSet
+Outputs:
+  Arn:
+    Value:
+      "Fn::GetAtt": [SlsTestWebAppWebACL, Arn]
