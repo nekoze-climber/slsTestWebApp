@@ -59,16 +59,25 @@ package:
 #  - serverless-plugin-monorepo
 
 functions:
-  autoCreateCodePipeline:
-    handler: src/lambda/autoCreateCodePipeline/index.handler
-    name: "autoCreateCodePipeline-${self:provider.stage}"
-    role: "arn:aws:iam::${self:provider.environment.ACCOUNT}:role/AutoCreateandDeleteCodePipelineLambdaRole-${self:provider.stage}"
+  autoCreateCodeBuild:
+    handler: src/lambda/autoCreateCodeBuild/index.handler
+    name: "autoCreateCodeBuild-${self:provider.stage}"
+    role: "arn:aws:iam::${self:provider.environment.ACCOUNT}:role/AutoCreateandDeleteCodeBuildLambdaRole-${self:provider.stage}"
     description: "This function is test app."
-  autoDeleteCodePipeline:
-    handler: src/lambda/autoDeleteCodePipeline/index.handler
-    name: "autoDeleteCodePipeline-${self:provider.stage}"
-    role: "arn:aws:iam::${self:provider.environment.ACCOUNT}:role/AutoCreateandDeleteCodePipelineLambdaRole-${self:provider.stage}"
+    environment:
+      CODE_BUILD_ROLE_ARN: "arn:aws:iam::${self:provider.environment.ACCOUNT}:role/CodeBuildServiceRole-${self:provider.stage}"
+      REGION: "${self:provider.region}"
+  autoStartCodeBuild:
+    handler: src/lambda/autoStartCodeBuild/index.handler
+    name: "autoStartCodeBuild-${self:provider.stage}"
+    role: "arn:aws:iam::${self:provider.environment.ACCOUNT}:role/AutoCreateandDeleteCodeBuildLambdaRole-${self:provider.stage}"
     description: "This function is test app."
+  autoDeleteCodeBuild:
+    handler: src/lambda/autoDeleteCodeBuild/index.handler
+    name: "autoDeleteCodeBuild-${self:provider.stage}"
+    role: "arn:aws:iam::${self:provider.environment.ACCOUNT}:role/AutoCreateandDeleteCodeBuildLambdaRole-${self:provider.stage}"
+    description: "This function is test app."
+
 #   post:
 #     handler: src/lambda/post/index.handler
 #     name: "post-${self:provider.stage}"

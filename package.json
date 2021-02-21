@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "jest",
-    "lint": "eslint **/service/**"
+    "lint": "eslint ./cloudwatch/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
   "homepage": "https://github.com/nekoze-climber/slsTestApp#readme",
   "devDependencies": {
     "eslint": "^7.5.0",
+    "eslint-plugin-jest": "^24.1.5",
     "jest": "^26.4.0"
   },
   "dependencies": {

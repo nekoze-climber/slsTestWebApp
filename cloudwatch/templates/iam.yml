@@ -1,8 +1,8 @@
 Resources:
-  AutoCreateandDeleteCodePipelineLambdaRole:
+  AutoCreateandDeleteCodeBuildLambdaRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: "AutoCreateandDeleteCodePipelineLambdaRole-${self:provider.stage}"
+      RoleName: "AutoCreateandDeleteCodeBuildLambdaRole-${self:provider.stage}"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -12,6 +12,74 @@ Resources:
             Action: sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-        - arn:aws:iam::aws:policy/AWSCodeCommitFullAccess
-        - arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess
-        - arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess
+      Path: "/"
+      Policies:
+        - PolicyName: "AutoCreateandDeleteCodeBuildLambdaPolicy-${self:provider.stage}"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Resource: "*"
+                Effect: Allow
+                Action:
+                  - "iam:GetRole"
+                  - "iam:PassRole"
+              - Resource: "*"
+                Effect: Allow
+                Action:
+                  - "codebuild:*"
+                  - "codecommit:*"
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                  - "logs:GetLogEvents"
+  CodeBuildServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "CodeBuildServiceRole-${self:provider.stage}"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+            Action: sts:AssumeRole
+      Path: "/"
+      Policies:
+        - PolicyName: codecommit-pullrequest-codebuild-execute-role
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Resource: "*"
+                Effect: Allow
+                Action:
+                  - codecommit:*
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+              - Resource: "*"
+                Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:GetObjectVersion
+  # CodeBuildEventRuleRole:
+  #   Type: AWS::IAM::Role
+  #   Properties:
+  #     RoleName: "CodeBuildEventRuleRole-${self:provider.stage}"
+  #     AssumeRolePolicyDocument:
+  #       Version: "2012-10-17"
+  #       Statement:
+  #         - Effect: Allow
+  #           Principal:
+  #             Service: events.amazonaws.com
+  #           Action: sts:AssumeRole
+  #     Path: "/"
+  #     Policies:
+  #       - PolicyName: "CodeBuildEventRulePolicy-${self:provider.stage}"
+  #         PolicyDocument:
+  #           Version: "2012-10-17"
+  #           Statement:
+  #             - Resource: "*"
+  #               Effect: Allow
+  #               Action:
+  #                 - codecommit:*

@@ -1,8 +1,8 @@
-# slsTestWEbApp222
+# slsWebTestApp
 
 ## Description
 
-slsTestApp is a sample serverless application. slsTestApp has no GUI.
+slsWebTestApp is a sample serverless application. slsWebTestApp has no GUI.
 This application is supposed to be deployed to AWS by serverless framework.
 
 ## Features

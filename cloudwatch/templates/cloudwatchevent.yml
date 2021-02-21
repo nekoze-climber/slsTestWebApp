@@ -1,53 +1,86 @@
 Resources:
-  AutoCreateCodePipeline:
+  AutoCreateCodeBuild:
     Type: AWS::Events::Rule
     Properties:
-      Description: Auto create codepipeline
+      Description: Auto create codeBuild
       EventPattern:
         source:
           - "aws.codecommit"
         detail-type:
           - "CodeCommit Pull Request State Change"
         detail:
+          event:
+            - "pullRequestCreated"
           pullRequestStatus:
             - "Open"
-      Name: AutoCreateCodePipeline
+      Name: AutoCreateCodeBuild
       State: "ENABLED"
       Targets:
-        - Arn: arn:aws:lambda:ap-northeast-1:${self:provider.environment.ACCOUNT}:function:autoCreateCodePipeline-dev
-          Id: autoCreateCodePipeline
-  AutoDeleteCodePipeline:
+        - Arn: arn:aws:lambda:ap-northeast-1:${self:provider.environment.ACCOUNT}:function:autoCreateCodeBuild-dev
+          Id: autoCreateCodeBuild
+  AutoStartCodeBuild:
     Type: AWS::Events::Rule
     Properties:
-      Description: Auto delete codepipeline
+      Description: Auto start codeBuild
       EventPattern:
         source:
           - "aws.codecommit"
         detail-type:
           - "CodeCommit Pull Request State Change"
         detail:
+          event:
+            - "pullRequestSourceBranchUpdated"
           pullRequestStatus:
-            - "Closed"
-      Name: AutoDeleteCodePipeline
+            - "Open"
+      Name: AutoStartCodeBuild
       State: "ENABLED"
       Targets:
-        - Arn: arn:aws:lambda:ap-northeast-1:${self:provider.environment.ACCOUNT}:function:autoDeleteCodePipeline-dev
-          Id: autoDeleteCodePipeline
-  AutoCreateCodePipelineLambdaInvokePermission:
+        - Arn: arn:aws:lambda:ap-northeast-1:${self:provider.environment.ACCOUNT}:function:autoStartCodeBuild-dev
+          Id: autoStartCodeBuild
+  AutoDeleteCodeBuild:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Auto delete codeBuild
+      EventPattern:
+        source:
+          - "aws.codecommit"
+        detail-type:
+          - "CodeCommit Pull Request State Change"
+        detail:
+          event:
+            - "pullRequestStatusChanged"
+            - "pullRequestMergeStatusUpdated"
+          pullRequestStatus:
+            - "Closed"
+      Name: AutoDeleteCodeBuild
+      State: "ENABLED"
+      Targets:
+        - Arn: arn:aws:lambda:ap-northeast-1:${self:provider.environment.ACCOUNT}:function:autoDeleteCodeBuild-dev
+          Id: autoDeleteCodeBuild
+  AutoCreateCodeBuildLambdaInvokePermission:
     Type: "AWS::Lambda::Permission"
     Properties:
-      FunctionName: "autoCreateCodePipeline-${self:provider.stage}"
+      FunctionName: "autoCreateCodeBuild-${self:provider.stage}"
       Action: "lambda:InvokeFunction"
       Principal: "events.amazonaws.com"
       SourceArn:
-        "Fn::GetAtt": [AutoCreateCodePipeline, Arn]
-    DependsOn: AutoCreateCodePipeline
-  AutoDeleteCodePipelineLambdaInvokePermission:
+        "Fn::GetAtt": [AutoCreateCodeBuild, Arn]
+    DependsOn: AutoCreateCodeBuild
+  AutoStartCodeBuildLambdaInvokePermission:
     Type: "AWS::Lambda::Permission"
     Properties:
-      FunctionName: "autoDeleteCodePipeline-${self:provider.stage}"
+      FunctionName: "autoStartCodeBuild-${self:provider.stage}"
       Action: "lambda:InvokeFunction"
       Principal: "events.amazonaws.com"
       SourceArn:
-        "Fn::GetAtt": [AutoDeleteCodePipeline, Arn]
-    DependsOn: AutoDeleteCodePipeline
+        "Fn::GetAtt": [AutoStartCodeBuild, Arn]
+    DependsOn: AutoStartCodeBuild
+  AutoDeleteCodeBuildLambdaInvokePermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: "autoDeleteCodeBuild-${self:provider.stage}"
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazonaws.com"
+      SourceArn:
+        "Fn::GetAtt": [AutoDeleteCodeBuild, Arn]
+    DependsOn: AutoDeleteCodeBuild
