@@ -1,20 +1,52 @@
 {
-  "extends": [
-    "eslint:recommended",
-    "plugin:jest/recommended"  
-  ],
-  "plugins": ["jest"],
-  "parserOptions": {
-    "sourceType": "module",
-    "ecmaVersion": 2018
-  },
-  "env": {
-    "browser": true,
-    "es6": true,
-    "node": true,
-    "jest/globals": true,
-    "commonjs" : true
-  },
-  "globals": {},
-  "rules": {}
+    "env": {
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "airbnb-typescript",
+        //"prettier/@typescript-eslint",
+        "prettier"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module",
+        "project": "./tsconfig.json"
+    },
+    "plugins": ["@typescript-eslint", "prettier", "jest"],
+    "rules": {
+        "no-console": "off",
+        "quotes": ["warn", "single"],
+        "brace-style": [
+            2,
+            "1tbs",
+            {
+                "allowSingleLine": true
+            }
+        ],
+        "guard-for-in": ["error"],
+        "curly": "warn",
+        "prefer-arrow-callback": [
+            "error",
+            {
+                "allowUnboundThis": false
+            }
+        ],
+        "@typescript-eslint/indent": ["error", 4],
+        "prettier/prettier": "error",
+        "import/prefer-default-export": "off",
+        "no-param-reassign": ["error", { "props": false }],
+        "object-curly-spacing": "off",
+        "@typescript-eslint/object-curly-spacing": "off",
+        "import/no-extraneous-dependencies": "off",
+        "no-throw-literal": "off",
+        "@typescript-eslint/no-throw-literal": "off"
+    }
 }

@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
-  title: slsTestApp API
-  description: API description of slsTestApp.
+  title: slsTestWebApp API
+  description: API description of slsTestWebApp.
   version: 1.0.0
 host: api.example.com
 basePath: /dev
@@ -18,7 +18,7 @@ consumes:
   - application/json
 
 paths:
-  /slsTestApp/v1/api/person:
+  /slsTestWebApp/v1/api/person:
     post:
       summary: Create a new person.
       description: Create a new person.
@@ -32,8 +32,8 @@ paths:
           description: person model which you want to create.
           required: true
       responses:
-        200:
-          description: OK
+        201:
+          description: Created
           schema:
             $ref: "#/definitions/producePersonModel"
         400:
@@ -45,10 +45,10 @@ paths:
         responses:
           default:
             statusCode: "200"
-        uri: "arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-northeast-1:{Please replace with your IAM Account ID here.}:function:slsTestApp-postPerson-dev/invocations"
+        uri: "arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-northeast-1:{Please replace with your IAM Account ID here.}:function:slsTestWebApp-postPerson-dev/invocations"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
-  /slsTestApp/v1/api/person/{personId}:
+  /slsTestWebApp/v1/api/person/{personId}:
     get:
       summary: Returns a person which matches id in path.
       description: Returns a person which matches id in path.
@@ -80,7 +80,7 @@ paths:
         responses:
           default:
             statusCode: "200"
-        uri: "arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-northeast-1:{Please replace with your IAM Account ID here.}:function:slsTestApp-getPerson-dev/invocations"
+        uri: "arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-northeast-1:{Please replace with your IAM Account ID here.}:function:slsTestWebApp-getPerson-dev/invocations"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
     put:
@@ -114,7 +114,7 @@ paths:
         responses:
           default:
             statusCode: "200"
-        uri: "arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-northeast-1:{Please replace with your IAM Account ID here.}:function:slsTestApp-putPerson-dev/invocations"
+        uri: "arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-northeast-1:{Please replace with your IAM Account ID here.}:function:slsTestWebApp-putPerson-dev/invocations"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
     delete:
@@ -138,7 +138,7 @@ paths:
         responses:
           default:
             statusCode: "200"
-        uri: "arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-northeast-1:{Please replace with your IAM Account ID here.}:function:slsTestApp-deletePerson-dev/invocations"
+        uri: "arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-northeast-1:{Please replace with your IAM Account ID here.}:function:slsTestWebApp-deletePerson-dev/invocations"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
 

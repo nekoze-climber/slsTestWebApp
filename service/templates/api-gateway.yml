@@ -6,25 +6,25 @@ Resources:
   GetPersonApiPermission:
     Type: "AWS::Lambda::Permission"
     Properties:
-      FunctionName: "slsTestApp-getPerson-${self:provider.stage}"
+      FunctionName: "slsTestWebApp-getPerson-${self:provider.stage}"
       Action: "lambda:InvokeFunction"
       Principal: "apigateway.amazonaws.com"
   PostPersonApiPermission:
     Type: "AWS::Lambda::Permission"
     Properties:
-      FunctionName: "slsTestApp-postPerson-${self:provider.stage}"
+      FunctionName: "slsTestWebApp-postPerson-${self:provider.stage}"
       Action: "lambda:InvokeFunction"
       Principal: "apigateway.amazonaws.com"
   PutPersonApiPermission:
     Type: "AWS::Lambda::Permission"
     Properties:
-      FunctionName: "slsTestApp-putPerson-${self:provider.stage}"
+      FunctionName: "slsTestWebApp-putPerson-${self:provider.stage}"
       Action: "lambda:InvokeFunction"
       Principal: "apigateway.amazonaws.com"
   DeletePersonApiPermission:
     Type: "AWS::Lambda::Permission"
     Properties:
-      FunctionName: "slsTestApp-deletePerson-${self:provider.stage}"
+      FunctionName: "slsTestWebApp-deletePerson-${self:provider.stage}"
       Action: "lambda:InvokeFunction"
       Principal: "apigateway.amazonaws.com"
   ApiGatewayDeployment:
