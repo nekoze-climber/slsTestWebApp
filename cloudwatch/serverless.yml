@@ -54,6 +54,19 @@ package:
   #    - include-me-dir/**
   exclude:
     - templates/**
+  individually: true
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules:
+      packagePath: ./../package.json
+      forceExclude:
+        - aws-sdk
+
+plugins:
+  - serverless-webpack
+  - serverless-pseudo-parameters
 
 #plugins:
 #  - serverless-plugin-monorepo
@@ -62,20 +75,20 @@ functions:
   autoCreateCodeBuild:
     handler: src/lambda/autoCreateCodeBuild/index.handler
     name: "autoCreateCodeBuild-${self:provider.stage}"
-    role: "arn:aws:iam::${self:provider.environment.ACCOUNT}:role/AutoCreateandDeleteCodeBuildLambdaRole-${self:provider.stage}"
+    role: "arn:aws:iam::#{AWS::AccountId}:role/AutoCreateandDeleteCodeBuildLambdaRole-${self:provider.stage}"
     description: "This function is test app."
     environment:
-      CODE_BUILD_ROLE_ARN: "arn:aws:iam::${self:provider.environment.ACCOUNT}:role/CodeBuildServiceRole-${self:provider.stage}"
+      CODE_BUILD_ROLE_ARN: "arn:aws:iam::#{AWS::AccountId}:role/CodeBuildServiceRole-${self:provider.stage}"
       REGION: "${self:provider.region}"
   autoStartCodeBuild:
     handler: src/lambda/autoStartCodeBuild/index.handler
     name: "autoStartCodeBuild-${self:provider.stage}"
-    role: "arn:aws:iam::${self:provider.environment.ACCOUNT}:role/AutoCreateandDeleteCodeBuildLambdaRole-${self:provider.stage}"
+    role: "arn:aws:iam::#{AWS::AccountId}:role/AutoCreateandDeleteCodeBuildLambdaRole-${self:provider.stage}"
     description: "This function is test app."
   autoDeleteCodeBuild:
     handler: src/lambda/autoDeleteCodeBuild/index.handler
     name: "autoDeleteCodeBuild-${self:provider.stage}"
-    role: "arn:aws:iam::${self:provider.environment.ACCOUNT}:role/AutoCreateandDeleteCodeBuildLambdaRole-${self:provider.stage}"
+    role: "arn:aws:iam::#{AWS::AccountId}:role/AutoCreateandDeleteCodeBuildLambdaRole-${self:provider.stage}"
     description: "This function is test app."
 
 #   post:
